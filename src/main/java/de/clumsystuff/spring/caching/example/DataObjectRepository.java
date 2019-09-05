@@ -10,8 +10,15 @@ public class DataObjectRepository {
 
 	private Supplier<String> expansiveResourceSupplier;
 
-	@Cacheable("dataObjectCache")
-	public DataObject getDataObject() {
+	@Cacheable("longCache")
+	public DataObject getLongDataObject() {
+
+		this.expansiveResourceSupplier.get();
+		return new DataObject("Tony", "Test");
+	}
+	
+	@Cacheable("shortCache")
+	public DataObject getShortDataObject() {
 
 		this.expansiveResourceSupplier.get();
 		return new DataObject("Tony", "Test");

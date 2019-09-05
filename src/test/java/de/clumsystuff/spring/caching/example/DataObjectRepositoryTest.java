@@ -17,15 +17,30 @@ public class DataObjectRepositoryTest {
 	private DataObjectRepository dataObjectRepository;
 
 	@Test
-	public void useCacheForSecondRead() {
+	public void shortCache() throws InterruptedException {
 
 		@SuppressWarnings("unchecked")
 		Supplier<String> expansiveResourceSupplier = Mockito.mock(Supplier.class);
 		this.dataObjectRepository.setExpansiveResourceSupplier(expansiveResourceSupplier);
 
-		this.dataObjectRepository.getDataObject();
-		this.dataObjectRepository.getDataObject();
+		this.dataObjectRepository.getLongDataObject();
+		Thread.sleep(2000);
+		this.dataObjectRepository.getLongDataObject();
 
 		Mockito.verify(expansiveResourceSupplier, Mockito.times(1)).get();
+	}
+
+	@Test
+	public void longCache() throws InterruptedException {
+
+		@SuppressWarnings("unchecked")
+		Supplier<String> expansiveResourceSupplier = Mockito.mock(Supplier.class);
+		this.dataObjectRepository.setExpansiveResourceSupplier(expansiveResourceSupplier);
+
+		this.dataObjectRepository.getShortDataObject();
+		Thread.sleep(2000);
+		this.dataObjectRepository.getShortDataObject();
+
+		Mockito.verify(expansiveResourceSupplier, Mockito.times(2)).get();
 	}
 }
